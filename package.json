@@ -1,7 +1,7 @@
 {
-  "name": "express-server",
+  "name": "express-sample-starter-kit",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,10 +9,10 @@
     "server": "nodemon dist/server.js",
     "dev": "concurrently \"npm run watch\" \"npm run server\""
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["express", "server", "typescript"],
+  "author": "tanmay",
   "license": "ISC",
-  "description": "",
+  "description": "A simple Express server written in TypeScript.",
   "devDependencies": {
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
