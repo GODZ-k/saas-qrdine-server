@@ -1,0 +1,237 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// demo model ----->
+
+model Demo {
+  Id        String   @id @default(cuid())
+  Name      String   @db.VarChar(200)
+  Email     String   @unique @db.VarChar(200)
+  Phone     String   @unique @db.VarChar(15)
+  Message   String?  @db.VarChar(500)
+  Staff_Id  String?
+  staff     User?    @relation("StaffDemos", fields: [Staff_Id], references: [Id])
+  CreatedAt DateTime @default(now())
+  UpdatedAt DateTime @updatedAt
+}
+
+// staff model -------->
+
+enum UserRole {
+  ADMIN
+  USER
+  STAFF
+}
+
+// model Staff {
+//   Id        Int      @id @default(autoincrement())
+//   // Name      String   @db.VarChar(200)
+//   // Email     String   @unique @db.VarChar(200)
+//   // Phone     String   @unique @db.VarChar(15)
+//   // Role      UserRole @default(STAFF)
+//   IsActive  Boolean  @default(true)
+//   CreatedAt DateTime @default(now())
+//   UpdatedAt DateTime @updatedAt
+// }
+
+// user model -------->
+
+model User {
+  Id                String            @id @default(cuid())
+  First_name        String?           @db.VarChar(200)
+  Last_name         String?           @db.VarChar(200)
+  Avatar            String?
+  Username          String?           @unique
+  EmailAddress      String?            @unique
+  Subscription_id   String?           @unique
+  Restaurant_id     String?           @unique
+  Role              UserRole          @default(USER)
+  CreatedAt         DateTime          @default(now())
+  UpdatedAt         DateTime          @updatedAt
+  LastActiveAt      DateTime?
+  LastSignInAt      DateTime?
+  isSubscribed      Boolean           @default(false)
+  isActive          Boolean           @default(true)
+  isBanned          Boolean           @default(false)
+  MfaEnabled        Boolean           @default(false)
+  TwoFactorEnabled  Boolean           @default(false)
+  Locked            Boolean           @default(false)
+  BackupCodeEnabled Boolean           @default(false)
+  // Relations
+  EmailAddresses    EmailAddress[]    @relation("UserEmailAddress")
+  Payment_history   Payment[]         @relation("UserPayments")
+  Demos             Demo[]            @relation("StaffDemos")
+  phoneNumbers      Phone[]     @relation("UserPhoneno")
+  subscription      Subscription?     @relation("UserSubscription", fields: [Subscription_id], references: [Id])
+  restaurant        Restaurant?       @relation("UserRestaurant", fields: [Restaurant_id], references: [Id])
+}
+
+model Phone {
+  Id          String   @id @default(cuid())
+  UserId      String
+  PhoneNumber String
+  isVerified Boolean @default(false)
+  CreatedAt   DateTime @default(now())
+  UpdatedAt   DateTime @updatedAt
+
+  // Relations
+  user User? @relation("UserPhoneno", fields: [UserId], references: [Id], onDelete: Cascade)
+}
+
+model EmailAddress {
+  Id           String            @id @default(cuid())
+  EmailAddress String            @unique
+  UserId       String
+  CreatedAt    DateTime          @default(now())
+  Verification String
+  UpdatedAt    DateTime          @updatedAt
+
+  // Relations
+  user User @relation("UserEmailAddress", fields: [UserId], references: [Id], onDelete: Cascade)
+}
+
+// restaurant info model --------->
+
+model Restaurant {
+  Id                      String              @id @default(cuid())
+  Restaurant_name         String              @db.VarChar(200)
+  Restaurant_url          String              @db.VarChar(200)
+  Restaurant_type         String              @db.VarChar(200)
+  Food_menu               String              @db.VarChar(500)
+  Tables                  Int                 @default(0)
+  Staff_count             Int                 @default(0)
+  Location                String              @db.VarChar(200)
+  Business_email          String              @unique @db.VarChar(300)
+  Business_contact_number Int                 @unique
+  Company_name            String              @db.VarChar(200)
+  Owner_name              String              @db.VarChar(200)
+  Restaurant_address      String              @unique
+  User_id                 User?               @relation("UserRestaurant")
+  Restaurant_legal_info   String              @unique
+  CreatedAt               DateTime            @default(now())
+  UpdatedAt               DateTime            @updatedAt
+  // relations -->
+  restaurant_legal_info   RestaurantLegalInfo @relation("RestaurantLegalInfo", fields: [Restaurant_legal_info], references: [Id])
+  restaurant_address      RestaurantAddress   @relation("RestaurantAddress", fields: [Restaurant_address], references: [Id])
+}
+
+// restaurant address model --------->
+
+model RestaurantAddress {
+  Id            String      @id @default(cuid())
+  Address       String      @db.VarChar(500)
+  Restaurant_id Restaurant? @relation("RestaurantAddress")
+  CreatedAt     DateTime    @default(now())
+  UpdatedAt     DateTime    @updatedAt
+}
+
+// restaurant legal ino model ------------->
+
+model RestaurantLegalInfo {
+  Id               String      @id @default(cuid())
+  GST              String      @unique @db.VarChar(15)
+  FSSAI_Licence    String      @db.VarChar(500)
+  MSME_Certificate String      @db.VarChar(500)
+  Company_pan      String      @db.VarChar(500)
+  Phone_no         String      @unique @db.VarChar(15)
+  Director_pan     String      @db.VarChar(500)
+  Director_aadhar  String      @db.VarChar(500)
+  Email            String      @unique @db.VarChar(200)
+  Cancel_cheque    String      @db.VarChar(500)
+  Restaurant_id    Restaurant? @relation("RestaurantLegalInfo")
+  CreatedAt        DateTime    @default(now())
+  UpdatedAt        DateTime    @updatedAt
+}
+
+// user subscription model ------>
+
+enum PlanType {
+  BASIC
+  PRO
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  INACTIVE
+  TRIALING
+  EXPIRED
+  CANCELED
+  UNPAID
+  PAUSED
+}
+
+model Subscription {
+  Id              String             @id @default(cuid())
+  Product_id      String
+  User_id         User?              @relation("UserSubscription")
+  Interval        String             @db.VarChar(200)
+  Plan_type       PlanType           @default(BASIC)
+  Start_date      DateTime           @default(now())
+  End_date        DateTime
+  Status          SubscriptionStatus @default(UNPAID)
+  Invoice         String             @db.VarChar(500)
+  Has_trial       Boolean            @default(true)
+  Amount          Int
+  Subscription_id String             @db.VarChar(200)
+  Payment_method  String             @db.VarChar(200)
+  Price           String             @db.VarChar(200)
+  Description     String             @db.VarChar(200)
+  CreatedAt       DateTime           @default(now())
+  UpdatedAt       DateTime           @updatedAt
+  Payment         Payment[]          @relation("Payments")
+  product         Product            @relation("Subscriptions", fields: [Product_id], references: [Id])
+}
+
+// Product model ------->
+
+enum Currency {
+  INR
+  USD
+  EUR
+}
+
+enum PlanInterval {
+  MONTH
+  YEAR
+}
+
+model Product {
+  Id            String         @id @default(cuid())
+  Plan_type     PlanType       @default(BASIC)
+  Amount        Int
+  Currency      Currency       @default(INR)
+  Interval      PlanInterval   @default(MONTH)
+  IsActive      Boolean        @default(true)
+  CreatedAt     DateTime       @default(now())
+  UpdatedAt     DateTime       @updatedAt
+  Subscriptions Subscription[] @relation("Subscriptions")
+}
+
+// Payment model  --------->
+
+enum PaymentStatus {
+  SUCCESS
+  FAILED
+  PENDING
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  User_id         String        @unique
+  Subscription_id String        @unique
+  Amount          Int
+  Payment_status  PaymentStatus @default(PENDING)
+  Invoice         String        @db.VarChar(500)
+  Payment_method  String        @db.VarChar(200)
+  CreatedAt       DateTime      @default(now())
+  UpdatedAt       DateTime      @updatedAt
+  // relation -->
+  user            User          @relation("UserPayments", fields: [User_id], references: [Id])
+  subscription    Subscription  @relation("Payments", fields: [Subscription_id], references: [Id])
+}

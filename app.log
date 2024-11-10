@@ -1,0 +1,12 @@
+{"name":"myApp","hostname":"users-MacBook-Pro.local","pid":64636,"level":30,"msg":"hello","time":"2024-11-09T17:44:28.090Z","v":0}
+{"name":"myApp","hostname":"users-MacBook-Pro.local","pid":64636,"level":30,"msg":"hello","time":"2024-11-09T17:44:28.104Z","v":0}
+{"name":"myApp","hostname":"users-MacBook-Pro.local","pid":64636,"level":40,"msg":"This is a warning","time":"2024-11-09T17:44:28.104Z","v":0}
+{"name":"myApp","hostname":"users-MacBook-Pro.local","pid":64636,"level":50,"msg":"This is an error","time":"2024-11-09T17:44:28.104Z","v":0}
+{"name":"myApp","hostname":"users-MacBook-Pro.local","pid":65548,"level":30,"msg":"hello","time":"2024-11-09T17:44:33.196Z","v":0}
+{"name":"myApp","hostname":"users-MacBook-Pro.local","pid":65548,"level":30,"msg":"hello","time":"2024-11-09T17:44:33.199Z","v":0}
+{"name":"myApp","hostname":"users-MacBook-Pro.local","pid":65548,"level":40,"msg":"This is a warning","time":"2024-11-09T17:44:33.199Z","v":0}
+{"name":"myApp","hostname":"users-MacBook-Pro.local","pid":65548,"level":50,"msg":"This is an error","time":"2024-11-09T17:44:33.199Z","v":0}
+{"name":"myApp","hostname":"users-MacBook-Pro.local","pid":66184,"level":30,"msg":"hello","time":"2024-11-09T17:48:32.696Z","v":0}
+{"name":"myApp","hostname":"users-MacBook-Pro.local","pid":66184,"level":30,"msg":"77 hello","time":"2024-11-09T17:48:32.721Z","v":0}
+{"name":"myApp","hostname":"users-MacBook-Pro.local","pid":66184,"level":40,"msg":"This is a warning","time":"2024-11-09T17:48:32.721Z","v":0}
+{"name":"myApp","hostname":"users-MacBook-Pro.local","pid":66184,"level":50,"msg":"This is an error","time":"2024-11-09T17:48:32.721Z","v":0}
