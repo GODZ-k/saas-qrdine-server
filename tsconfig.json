@@ -34,6 +34,6 @@
     "strict": true,            // Enables strict type checking (optional but recommended)
     "resolveJsonModule": true  // If you're importing JSON files
   },
-  "include": ["src/**/*","server.ts" , "app.log" ,"src/**/*.d.ts"],                 // Include all TypeScript files in the src directory
+  "include": ["src/**/*","server.ts" , "app.log" ,"src/**/*.d.ts", "src/utils/.ts"],                 // Include all TypeScript files in the src directory
   "exclude": ["node_modules", "**/*.spec.ts"] // Exclude node_modules and test files
 }

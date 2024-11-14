@@ -7,6 +7,7 @@ import mainRoute from './routes/main.route.js'
 import userRoute from './routes/user.route.js'
 import adminRoute from './routes/admin.route.js'
 import staffRoute from './routes/staff.route.js'
+import addonRoute from './routes/addon.route.js'
 import webhookroute from './routes/webhook.route.js'
 import bodyParser from 'body-parser'
 
@@ -28,6 +29,7 @@ app.use(cookieParser())
 app.use('/api/v1' , mainRoute )
 app.use('/api/webhook' , webhookroute)
 app.use('/api/v1/user' , userRoute )
+app.use('/api/v1/addons' , addonRoute )
 app.use('/api/v1/admin' , adminRoute )
 app.use('/api/v1/staff' , staffRoute )
 

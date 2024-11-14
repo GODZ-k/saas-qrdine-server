@@ -1,11 +1,55 @@
 import { Response , Request } from "express"
+import { demoData, demoType } from "../Types/demo.types.js"
+import prisma from "../config/db.config.js"
 
-const mainController = async(req:Request , res:Response):Promise<any> =>{
+
+
+const demoController = async(req:Request , res:Response):Promise<any> =>{
+    const inputData:demoData = req.body
+    const payload = demoType.safeParse(inputData)
+
+    
+    if(!payload.success){
+        console.log(payload.error.errors)
+        return res.status(400).json({
+            msg:payload.error.errors[0].message
+        })
+    }
+
+    const { firstName , lastName ,  email , preferedTime , phone , message } = payload.data
+
+    const user = await prisma.demo.findFirst({
+        where:{
+            OR:[
+                {Email:email},
+                {Phone:phone}
+            ]
+        }
+    })
+
+    if(user){
+        return res.status(400).json({
+            msg:"you already have take a demo"
+        })
+    }
+
+    await prisma.demo.create({
+        data:{
+            Email:email,
+            Phone:phone,
+            FirstName:firstName,
+            LastName:lastName || "",
+            Message:message,
+            PreferedTime: preferedTime ? new Date(preferedTime) : " ", // Parse date if provided
+        }
+    })
+
+
     return res.status(200).json({
-        msg:"Everything is working fine"
+        msg:"Demo scheduled successfully"
     })
 }
 
 
 
-export default mainController
+export default demoController

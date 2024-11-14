@@ -5,7 +5,11 @@ declare global {
     namespace Express {
         interface Request {
             user?:string;
-            event?:WebhookEvent
+            event?:{
+                payload?:object;
+                event?:event
+                data?:object
+            };
         }
     }
 

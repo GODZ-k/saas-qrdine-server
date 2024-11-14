@@ -16,7 +16,6 @@ export const requireAdmin = async (
   try {
     const role = (auth.sessionClaims?.unsafeMetadata as { role?: string})?.role
 
-
     console.log(role)
 
     if (role !== roles.ADMIN) {
